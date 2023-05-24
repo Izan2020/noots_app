@@ -1,0 +1,27 @@
+name: noots_app
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+
+dependencies:
+  build_runner: ^2.3.3
+  date_format: ^2.0.7
+  date_formatter: ^0.0.4
+  floor: ^1.4.2
+  floor_generator: ^1.4.2
+  flutter:
+    sdk: flutter
+  flutter_slidable: ^3.0.0
+  fluttertoast: ^8.2.1
+  provider: ^6.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
