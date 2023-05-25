@@ -1,5 +1,11 @@
 # NootsApp
 
+
+https://github.com/Izan2020/noots_app/assets/59131023/10db1baf-21d3-4131-b2d6-41b5607eeccb
+
+
+
+
 The "Noots" application is a note-taking app developed using the Flutter framework. The app offers a clean and structured approach to note management, allowing users to create, read, update, and delete notes effortlessly. The Flutter framework provides a rich set of tools and widgets, enabling the development of a smooth and visually appealing user interface.
 
 The structure of the Noots app is well-organized, demonstrating good software architecture practices. With the Create, Read, Update, and Delete (CRUD) functionality implemented, users can seamlessly interact with their notes. The app's modular design makes it easy to extend and enhance its capabilities in the future.
@@ -15,4 +21,7 @@ In summary, the Noots application built using the Flutter framework demonstrates
 
 ### 📦 Database - Using the Local Room Database
 ∙ I use **Floor** package from pub.dev
+
+### 📷 Snapshots
+![foto](https://cdn.discordapp.com/attachments/1110006269571514438/1111178716870094859/image.png)
 
