@@ -69,7 +69,7 @@ class _$AppDatabase extends AppDatabase {
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 3,
+      version: 6,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Notes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `dateAdded` TEXT NOT NULL, `lastUpdate` TEXT, `category` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `Notes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `dateAdded` TEXT NOT NULL, `lastUpdate` TEXT, `category` TEXT, `is_checked` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -113,7 +113,8 @@ class _$NotesDao extends NotesDao {
                   'content': item.content,
                   'dateAdded': item.dateAdded,
                   'lastUpdate': item.lastUpdate,
-                  'category': item.category
+                  'category': item.category,
+                  'is_checked': item.is_checked ? 1 : 0
                 }),
         _notesUpdateAdapter = UpdateAdapter(
             database,
@@ -125,7 +126,8 @@ class _$NotesDao extends NotesDao {
                   'content': item.content,
                   'dateAdded': item.dateAdded,
                   'lastUpdate': item.lastUpdate,
-                  'category': item.category
+                  'category': item.category,
+                  'is_checked': item.is_checked ? 1 : 0
                 }),
         _notesDeletionAdapter = DeletionAdapter(
             database,
@@ -137,7 +139,8 @@ class _$NotesDao extends NotesDao {
                   'content': item.content,
                   'dateAdded': item.dateAdded,
                   'lastUpdate': item.lastUpdate,
-                  'category': item.category
+                  'category': item.category,
+                  'is_checked': item.is_checked ? 1 : 0
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -176,6 +179,12 @@ class _$NotesDao extends NotesDao {
             row['lastUpdate'] as String?,
             row['category'] as String?),
         arguments: [id]);
+  }
+
+  @override
+  Future<void> deleteById(int idnotes) async {
+    await _queryAdapter
+        .queryNoReturn('DELETE FROM notes WHERE id = ?1', arguments: [idnotes]);
   }
 
   @override

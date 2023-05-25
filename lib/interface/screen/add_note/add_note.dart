@@ -24,8 +24,15 @@ class _AddNotesScreenState extends State<AddNotesScreen> {
     Notes notes = Notes(null, _titleController.text.toString(), now.toString(),
         _contentController.text.toString(), '', '');
     await _notesProvider.addNotes(notes);
-    _notesProvider.listOfNotes();
     Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      return _notesProvider.listOfNotes();
+    });
   }
 
   @override
@@ -47,7 +54,10 @@ class _AddNotesScreenState extends State<AddNotesScreen> {
                 onTap: () => {addNotes()},
                 child: Container(
                     margin: const EdgeInsets.only(right: 12),
-                    child: const Icon(Icons.save))),
+                    child: const Icon(
+                      Icons.save,
+                      color: Colors.blueAccent,
+                    ))),
           ],
         ),
         body: SizedBox(

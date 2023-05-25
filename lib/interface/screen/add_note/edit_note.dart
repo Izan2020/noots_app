@@ -40,10 +40,10 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
         _notesProvider.currentNotes!.dateAdded,
         newContent,
         dateUpdated.toString(),
-        "");
+        null);
     await _notesProvider.updateNotes(newNotes);
-    Navigator.pop(context);
     _notesProvider.listOfNotes();
+    Navigator.pop(context);
   }
 
   @override

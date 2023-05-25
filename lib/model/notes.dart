@@ -13,6 +13,7 @@ class Notes {
 
   String? lastUpdate = "";
   String? category = "";
+  bool is_checked = false;
 
   Notes(this.id, this.title, this.dateAdded, this.content, this.lastUpdate,
       this.category);

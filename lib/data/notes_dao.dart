@@ -16,6 +16,9 @@ abstract class NotesDao {
   @delete
   Future<void> deleteNotes(Notes notes);
 
+  @Query('DELETE FROM notes WHERE id = :idnotes')
+  Future<void> deleteById(int idnotes);
+
   @update
   Future<void> updateNotes(Notes notes);
 }
