@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:noots_app/constants/app_colors.dart';
+import 'package:noots_app/constants/app_enum.dart';
 import 'package:noots_app/constants/app_strings.dart';
 import 'package:noots_app/interface/screen/add_note/add_note.dart';
 import 'package:noots_app/interface/widget/home_widgets.dart';
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late InterfaceProvider _interfaceProvider;
 
   Future<void> _clearDeleteState() async {
+    _notesProvider.clearAllCheckedItems();
     return _interfaceProvider.clearDeleteMode();
   }
 
@@ -42,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
           backgroundColor: AppColors.white,
           appBar: HomeWidgets().homeAppBar(
-              checkedLists: _notesProvider.countOfCheckedItems(),
+              checkedLists: _notesProvider.currentCheckedItems!,
               noteState: _notesProvider.noteListState!,
               onTapAdd: () {
                 _clearDeleteState();
@@ -59,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 await _notesProvider.listOfNotes();
               },
               isDeleteStet: _interfaceProvider.isDeleteMode),
-          body: _notesProvider.notesList.isNotEmpty
+          body: _notesProvider.noteListState == NoteState.none
               ? SizedBox(
                   height: double.infinity,
                   child: ListView.builder(

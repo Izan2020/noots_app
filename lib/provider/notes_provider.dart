@@ -18,6 +18,9 @@ class NotesProvider extends ChangeNotifier {
   String? _currentNotesContent = '';
   String? get currentNotesContent => _currentNotesContent;
 
+  int? _currentCheckedItems = 0;
+  int? get currentCheckedItems => _currentCheckedItems;
+
   Future<void> onChangeValueTitle(String title) async {
     _currentNotesTitle = title;
     notifyListeners();
@@ -92,10 +95,18 @@ class NotesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  int countOfCheckedItems() {
+  Future<void> countOfCheckedItems() async {
     final listOfChecked = _notesList.map((e) => e.is_checked);
     int totalChecked = listOfChecked.length;
-    return totalChecked;
+    _currentCheckedItems = totalChecked;
+    notifyListeners();
+  }
+
+  Future<void> clearAllCheckedItems() async {
+    for (var checked in _notesList) {
+      checked.is_checked = false;
+    }
+    notifyListeners();
   }
 
   Future<void> deleteNotesById(int id) async {
