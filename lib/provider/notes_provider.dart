@@ -92,6 +92,18 @@ class NotesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  int countOfCheckedItems() {
+    final listOfChecked = _notesList.map((e) => e.is_checked);
+    int totalChecked = listOfChecked.length;
+    return totalChecked;
+  }
+
+  Future<void> deleteNotesById(int id) async {
+    final database = await _createDatabase();
+    final dao = await database.notesDao.deleteById(id);
+    return dao;
+  }
+
   void clearCurrentNotes() {
     _currentNotes = null;
     notifyListeners();

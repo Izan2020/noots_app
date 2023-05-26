@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:noots_app/constants/app_colors.dart';
 import 'package:noots_app/constants/app_strings.dart';
 import 'package:noots_app/interface/screen/add_note/add_note.dart';
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
           backgroundColor: AppColors.white,
           appBar: HomeWidgets().homeAppBar(
+              checkedLists: _notesProvider.countOfCheckedItems(),
               noteState: _notesProvider.noteListState!,
               onTapAdd: () {
                 _clearDeleteState();
@@ -66,6 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: _notesProvider.notesList.length,
                       itemBuilder: (context, index) {
                         return ItemNotes(
+                          onSlidableItem: () {
+                            _notesProvider.deleteNotesById(
+                                _notesProvider.notesList[index].id!);
+                            _notesProvider.listOfNotes();
+                          },
                           notes: _notesProvider.notesList[index],
                           isDeleteState: _interfaceProvider.isDeleteMode,
                           onTapItem: () {
