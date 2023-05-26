@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:noots_app/constants/app_colors.dart';
+import 'package:noots_app/constants/app_strings.dart';
 import 'package:noots_app/model/notes.dart';
 import 'package:noots_app/provider/notes_provider.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +24,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     if (_notesProvider.currentNotes != null) {
       _titleController.text = _notesProvider.currentNotes!.title;
       _contentController.text = _notesProvider.currentNotes!.content;
+      _notesProvider.onChangeValueTitle(_notesProvider.currentNotes!.title);
+      _notesProvider.onChangeValueContent(_notesProvider.currentNotes!.content);
     }
   }
 
@@ -30,10 +34,6 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     String dateUpdated = currentTime.toString();
     String newTitle = _titleController.text.toString();
     String newContent = _contentController.text.toString();
-    if (newTitle.isEmpty || newContent.isEmpty) {
-      Fluttertoast.showToast(msg: "Fill the Blanks!");
-      return;
-    }
     Notes newNotes = Notes(
         widget.notesId,
         newTitle,
@@ -57,7 +57,6 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   @override
   void initState() {
     super.initState();
-    _notesProvider = Provider.of<NotesProvider>(context, listen: false);
 
     Future.delayed(const Duration(milliseconds: 300), () {
       return getNotes();
@@ -66,30 +65,51 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _notesProvider = Provider.of<NotesProvider>(context);
     return Scaffold(
         appBar: AppBar(
           title: TextField(
+            onChanged: (value) {
+              _notesProvider.onChangeValueTitle(value);
+            },
             controller: _titleController,
             decoration: const InputDecoration(border: InputBorder.none),
           ),
-          iconTheme: const IconThemeData(color: Colors.black),
-          backgroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: AppColors.black),
+          backgroundColor: AppColors.white,
           elevation: 0,
           actions: [
-            GestureDetector(
-                onTap: () => {updateNotes()},
-                child: Container(
-                    margin: const EdgeInsets.only(right: 12),
-                    child: const Icon(Icons.save))),
+            Visibility(
+              visible: _notesProvider.currentNotesTitle!.isEmpty ||
+                      _notesProvider.currentNotesContent!.isEmpty
+                  ? false
+                  : true,
+              child: GestureDetector(
+                  onTap: () => {updateNotes()},
+                  child: Container(
+                      margin: const EdgeInsets.only(right: 12),
+                      child: const Icon(Icons.save,
+                          color: AppColors.blue,
+                          shadows: [
+                            Shadow(
+                              color: AppColors.blue,
+                              offset: Offset(0.2, 0.2),
+                              blurRadius: 29.0,
+                            )
+                          ]))),
+            ),
           ],
         ),
         body: SizedBox(
           // <-- TextField width
           height: double.infinity, // <-- TextField height
           child: TextField(
+            onChanged: (value) {
+              _notesProvider.onChangeValueContent(value);
+            },
             controller: _contentController,
             maxLines: null,
-            cursorColor: Colors.black,
+            cursorColor: AppColors.black,
             expands: true,
             keyboardType: TextInputType.multiline,
             decoration: const InputDecoration(filled: true),
