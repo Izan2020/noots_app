@@ -1,11 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-
-import 'package:noots_app/interface/screen/add_note/edit_note.dart';
+import 'package:noots_app/constants/app_colors.dart';
+import 'package:noots_app/constants/app_enum.dart';
+import 'package:noots_app/constants/app_icons.dart';
+import 'package:noots_app/constants/app_strings.dart';
 import 'package:noots_app/util/strings.dart';
 
 import '../../model/notes.dart';
@@ -16,68 +14,82 @@ class HomeWidgets {
     required Function onTapDeleteState,
     required bool isDeleteStet,
     required Function onTapDeleteAll,
+    required NoteState noteState,
   }) {
     return AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
             // Status bar color
             ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leadingWidth: isDeleteStet ? 70 : 50,
-        leading: Row(
-          children: [
-            GestureDetector(
-              onTap: () => onTapDeleteState(),
-              child: Container(
-                margin: const EdgeInsets.only(left: 12),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 900),
-                  child: Icon(
-                    !isDeleteStet ? Icons.delete_rounded : Icons.close,
-                    color: !isDeleteStet ? Colors.black : Colors.grey,
+        leading: Visibility(
+          visible: noteState == NoteState.empty ? false : true,
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () => onTapDeleteState(),
+                child: Container(
+                  margin: const EdgeInsets.only(left: 12),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 900),
+                    child: Icon(
+                      !isDeleteStet ? AppIcons.delete : AppIcons.close,
+                      color: !isDeleteStet ? AppColors.black : AppColors.gray,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Visibility(
-                visible: isDeleteStet,
-                child: GestureDetector(
-                  onTap: () => onTapDeleteAll(),
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 8),
-                    child: const Icon(
-                      Icons.delete_outline_rounded,
-                      color: Colors.redAccent,
+              Visibility(
+                  visible: isDeleteStet,
+                  child: GestureDetector(
+                    onTap: () => onTapDeleteAll(),
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 8),
+                      child: const Icon(AppIcons.deleteRounded,
+                          color: AppColors.red,
+                          shadows: [
+                            Shadow(
+                              color: AppColors.red,
+                              offset: Offset(0.2, 0.2),
+                              blurRadius: 29.0,
+                            )
+                          ]),
                     ),
-                  ),
-                ))
-          ],
+                  ))
+            ],
+          ),
         ),
         actions: [
           GestureDetector(
-            onTap: () => onTapAdd(),
+            onTap: () => noteState == NoteState.empty ? null : onTapAdd(),
             child: Container(
               margin: const EdgeInsets.only(right: 12),
-              child: const Icon(
-                Icons.add,
-                color: Colors.blue,
-              ),
+              child: Icon(Icons.add,
+                  color: noteState == NoteState.empty
+                      ? AppColors.transparent
+                      : AppColors.blue,
+                  shadows: const [
+                    Shadow(
+                      color: AppColors.blue,
+                      offset: Offset(0.2, 0.2),
+                      blurRadius: 18.0,
+                    )
+                  ]),
             ),
           )
         ],
-        title: Container(
-          width: double.infinity,
-          alignment: Alignment.center,
-          child: const Center(
-            child: Text(
-              'Notes',
-              style: TextStyle(color: Colors.black),
-            ),
+        title: const Center(
+          child: Text(
+            AppStrings.widgetAppType,
+            style: TextStyle(color: AppColors.black),
+            textAlign: TextAlign.center,
           ),
         ));
   }
 }
 
+// ignore: must_be_immutable
 class ItemNotes extends StatefulWidget {
   final Notes notes;
   bool isDeleteState;
@@ -104,6 +116,7 @@ class _ItemNotesState extends State<ItemNotes> {
           child: Visibility(
               visible: widget.isDeleteState,
               child: Checkbox(
+                  activeColor: AppColors.blue,
                   value: widget.notes.is_checked,
                   onChanged: (value) {
                     setState(() {
@@ -119,10 +132,10 @@ class _ItemNotesState extends State<ItemNotes> {
               padding: const EdgeInsets.all(4),
               margin: const EdgeInsets.all(5),
               decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey,
+                      color: AppColors.gray,
                       offset: Offset(0.0, 1.0), //(x,y)
                       blurRadius: 6.0,
                     ),
@@ -154,9 +167,9 @@ class _ItemNotesState extends State<ItemNotes> {
                           children: [
                             Text(
                               widget.notes.lastUpdate!.isNotEmpty
-                                  ? 'Updated ${timestampToHour(widget.notes.lastUpdate, 'EEEE, dd MMMM ')}'
-                                  : timestampToHour(
-                                      widget.notes.dateAdded, 'EEEE, dd MMMM '),
+                                  ? 'Updated ${timestampToHour(widget.notes.lastUpdate, AppStrings.timestampDayDateMonth)}'
+                                  : timestampToHour(widget.notes.dateAdded,
+                                      AppStrings.timestampDayDateMonth),
                               style: const TextStyle(
                                   fontSize: 12, color: Colors.grey),
                               textAlign: TextAlign.end,

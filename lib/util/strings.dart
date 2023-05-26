@@ -1,5 +1,5 @@
-import 'package:date_formatter/date_formatter.dart';
-import 'package:intl/intl.dart';
+// ignore: depend_on_referenced_packages
+import "package:intl/intl.dart";
 
 String truncateWithEllipsis(int cutoff, String myString) {
   return (myString.length <= cutoff)
