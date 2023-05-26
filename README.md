@@ -1,7 +1,10 @@
 # NootsApp
 
 
-https://github.com/Izan2020/noots_app/assets/59131023/10db1baf-21d3-4131-b2d6-41b5607eeccb
+
+
+
+https://github.com/Izan2020/noots_app/assets/59131023/f1dec853-9f21-4f00-9724-0e794e1537b1
 
 
 
