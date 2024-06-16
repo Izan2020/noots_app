@@ -1,6 +1,7 @@
 ![foto](https://i.imgur.com/aqNyo6G.png)
 
 [![Technologies](https://skillicons.dev/icons?i=flutter,dart,supabase)](https://skillicons.dev)
+
 # NootsApp
 The "Noots" application is a note-taking app developed using the Flutter framework. The app offers a clean and structured approach to note management, allowing users to create, read, update, and delete notes effortlessly. The Flutter framework provides a rich set of tools and widgets, enabling the development of a smooth and visually appealing user interface.
 
