@@ -1,4 +1,4 @@
-![foto](https://cdn.discordapp.com/attachments/1110006269571514438/1112535519465840690/Artboard_1.png)
+![foto]([https://cdn.discordapp.com/attachments/1110006269571514438/1112535519465840690/Artboard_1.png](https://i.imgur.com/aqNyo6G.png))
 # NootsApp
 The "Noots" application is a note-taking app developed using the Flutter framework. The app offers a clean and structured approach to note management, allowing users to create, read, update, and delete notes effortlessly. The Flutter framework provides a rich set of tools and widgets, enabling the development of a smooth and visually appealing user interface.
 
