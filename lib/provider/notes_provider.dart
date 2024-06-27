@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:noots_app/constants/app_enum.dart';
+import 'package:noots_app/constants/app_strings.dart';
 import 'package:noots_app/data/notes_database.dart';
 
 import '../model/notes.dart';
@@ -11,16 +12,53 @@ class NotesProvider extends ChangeNotifier {
   Notes? _currentNotes;
   Notes? get currentNotes => _currentNotes;
 
+  String? _currentNotesTitle = '';
+  String? get currentNotesTitle => _currentNotesTitle;
+
+  String? _currentNotesContent = '';
+  String? get currentNotesContent => _currentNotesContent;
+
+  int? _currentCheckedItems = 0;
+  int? get currentCheckedItems => _currentCheckedItems;
+
+  Future<void> onChangeValueTitle(String title) async {
+    _currentNotesTitle = title;
+    notifyListeners();
+  }
+
+  Future<void> onChangeValueContent(String content) async {
+    _currentNotesContent = content;
+    notifyListeners();
+  }
+
+  Future<void> clearStateOnChange() async {
+    _currentNotesContent = '';
+    _currentNotesTitle = '';
+    notifyListeners();
+  }
+
+  NoteState? _noteListState = NoteState.init;
+  NoteState? get noteListState => _noteListState;
+
+  _setNoteState(NoteState state) {
+    _noteListState = state;
+    notifyListeners();
+  }
+
   Future<AppDatabase> _createDatabase() async {
-    return await $FloorAppDatabase.databaseBuilder('notes_database.db').build();
+    return await $FloorAppDatabase
+        .databaseBuilder(AppStrings.appDatabase)
+        .build();
   }
 
   Future<void> listOfNotes() async {
     final database = await _createDatabase();
     final dao = await database.notesDao.getAllNotes();
-    debugPrint(dao.length.toString());
     if (dao.isNotEmpty) {
+      _setNoteState(NoteState.none);
       _notesList = dao;
+    } else {
+      _setNoteState(NoteState.empty);
     }
     notifyListeners();
   }
@@ -42,7 +80,6 @@ class NotesProvider extends ChangeNotifier {
   Future<void> getNotes(int id) async {
     final database = await _createDatabase();
     final dao = await database.notesDao.selectNote(id);
-    debugPrint("$dao");
     _currentNotes = dao;
     notifyListeners();
   }
@@ -54,8 +91,28 @@ class NotesProvider extends ChangeNotifier {
         await database.notesDao.deleteById(note.id!);
       }
     }
-
+    listOfNotes();
     notifyListeners();
+  }
+
+  Future<void> countOfCheckedItems() async {
+    final listOfChecked = _notesList.map((e) => e.is_checked);
+    int totalChecked = listOfChecked.length;
+    _currentCheckedItems = totalChecked;
+    notifyListeners();
+  }
+
+  Future<void> clearAllCheckedItems() async {
+    for (var checked in _notesList) {
+      checked.is_checked = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> deleteNotesById(int id) async {
+    final database = await _createDatabase();
+    final dao = await database.notesDao.deleteById(id);
+    return dao;
   }
 
   void clearCurrentNotes() {
